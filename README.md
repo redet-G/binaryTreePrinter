@@ -1,15 +1,18 @@
  binaryTreePrinter 
 ======================
-example of pland out put of tree
-		5
-	       / \
+
+example of planned output of tree
+
+```
+                5
+               / \
               /   \
              /     \
             /       \
            2         10
-	  / \        / \
+          / \        / \
          1   3      6   8
-
+```
 
 # to do list
 - [ ] code the tree it self
