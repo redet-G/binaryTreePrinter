@@ -15,8 +15,8 @@ example of planned output of tree
 ```
 
 # to do list
-- [ ] code the tree it self
-- [ ] make try basic pritering
+- [x] code the tree it self
+- [x] make try basic printing
 - [ ] prepare standar tesing tree
 - [ ] try more advanced ones
 - [ ] refine the code
