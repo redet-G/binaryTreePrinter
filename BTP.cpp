@@ -90,6 +90,10 @@ int leaf(node* l){
 	}
 }
 
+void enqueue(int a);
+int dequeue();
+bool isEmpty();
+
 int main(){
 	insert(9);
 	insert(49);
@@ -103,5 +107,58 @@ int main(){
 	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root);
 	cout<<endl<<"---------------------------------"<<endl;
 	printer(root);
+	
+	
+	//teting the queue
+	enqueue(2);enqueue(54);enqueue(6);
+	while(!isEmpty()){
+		cout<<dequeue()<<" ";
+	}
+}
+
+
+///implementing queue
+struct point{
+	int val;
+	point* next;
+	point* prev;
+};
+
+point* parent=NULL;
+
+bool isEmpty(){
+
+	return (parent==NULL);
+}
+
+void enqueue(int a){
+	point* p = new point;
+	p->val=a;
+	p->next=p;
+	p->prev=p;
+	if(parent==NULL){
+		parent=p;
+	}else{
+		p->next=parent;
+		p->prev=parent->prev;
+		parent->prev=p;
+		parent=p;
+	}
+}
+
+int dequeue(){
+	if(parent!=NULL){
+		if(parent->next==parent){
+			int temp = parent->val;
+			parent=NULL;
+			return temp;
+		}else{
+			int temp = (parent->prev)->val;
+			parent->prev=parent->prev->prev;
+			parent->prev->next=parent;
+			return temp;
+		}	 
+	}
+	return -1;
 }
 
