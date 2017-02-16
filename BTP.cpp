@@ -7,9 +7,17 @@ struct node{
 	node* right;
 };
 
+struct point{
+	node* val;
+	point* next;
+	point* prev;
+};
+
 void enqueue(node* a);
 node* dequeue();
 bool isEmpty();
+int levelOf(node*,node*);
+bool isInTree(node*,node*);
 
 
 node* root=NULL;
@@ -83,11 +91,17 @@ void printer(node* nd){
 		return;
 	else{
 		enqueue(nd);		
-		while(isEmpty()){
+		int lastLevel=0;
+		int currentNodeLevel;
+		while(!isEmpty()){
 			nd=dequeue();			
 			int h=max(leaf(nd),hight(nd)*2);
 			disp(nd,h);
-			cout<<endl;
+			currentNodeLevel=levelOf(nd,root);
+			if(currentNodeLevel!=lastLevel){
+				cout<<endl;
+				lastLevel=currentNodeLevel;
+			}
 			enqueue(nd->left);
 			enqueue(nd->right);
 		}
@@ -103,15 +117,40 @@ int leaf(node* l){
 	}
 }
 
+int levelOf(node* val,node* from){
+	if(val==from){
+		return 0;
+	}else{
+		if(isInTree(val,from->left))
+			return 1+levelOf(val,from->left);
+		else if(isInTree(val,from->right))
+			return 1+levelOf(val,from->right);
+		else
+			return -1;
+	}
+}
+
+bool isInTree(node* val, node* in){
+	if(in!=NULL){
+		if(val->key==in->key)
+			return true;
+		else if(val->key>in->key)
+			return isInTree(val,in->left);
+		else 
+			return isInTree(val,in->right);
+	}
+	return false;
+}
+
 int main(){
 	insert(9);
 	insert(49);
 	insert(23);
 	insert(13);
-    insert(03);
+	insert(03);
 	insert(53);
 	insert(6);
-    insert(7);
+	insert(7);
 	cout<<"preorder:";basicDisplay(root);
 	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root);
 	cout<<endl<<"---------------------------------"<<endl;
