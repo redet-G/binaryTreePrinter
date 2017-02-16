@@ -1,15 +1,10 @@
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 struct node{
 	int key;
 	node* left;
 	node* right;
-};
-
-struct point{
-	node* val;
-	point* next;
-	point* prev;
 };
 
 void enqueue(int a);
@@ -84,10 +79,10 @@ void printer(node* nd){
 	if(nd==NULL)
 		return;
 	else{
-		enqueue((node)nd);
-		while(!isEmpty()){
-			node* no = dequeue();
-			int h=max(leaf(no),hight(no)*2);
+		enqueue(nd);		
+		while(isEmpty()){
+			nd=dequeue();			
+			int h=max(leaf(nd),hight(nd)*2);
 			disp(nd,h);
 			cout<<endl;
 			enqueue(nd->left);
@@ -160,4 +155,3 @@ node* dequeue(){
 	}
 	return NULL;
 }
-
