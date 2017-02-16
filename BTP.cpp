@@ -7,12 +7,14 @@ struct node{
 	node* right;
 };
 
-void enqueue(int a);
+void enqueue(node* a);
 node* dequeue();
 bool isEmpty();
 
 
 node* root=NULL;
+point* parent;
+
 
 void insert(node* to,node* n){
 	if(n){
@@ -74,6 +76,7 @@ void disp(node* p,int h){
 	}	 
 	cout<<p->key;
 }
+
 int leaf(node* l);
 void printer(node* nd){
 	if(nd==NULL)
@@ -118,11 +121,9 @@ int main(){
 
 ///implementing queue
 
-point* parent=NULL;
 
 bool isEmpty(){
-
-	return (parent==NULL);
+	return parent==NULL;
 }
 
 void enqueue(node* n){
@@ -155,3 +156,4 @@ node* dequeue(){
 	}
 	return NULL;
 }
+
