@@ -6,8 +6,18 @@ struct node{
 	node* right;
 };
 
-node* root=NULL;
+struct point{
+	node* val;
+	point* next;
+	point* prev;
+};
 
+void enqueue(int a);
+node* dequeue();
+bool isEmpty();
+
+
+node* root=NULL;
 
 void insert(node* to,node* n){
 	if(n){
@@ -74,10 +84,15 @@ void printer(node* nd){
 	if(nd==NULL)
 		return;
 	else{
-		int h=max(leaf(nd),hight(nd)*2);
-		disp(nd,h);
-		cout<<endl;
-		printer(nd->left);
+		enqueue((node)nd);
+		while(!isEmpty()){
+			node* no = dequeue();
+			int h=max(leaf(no),hight(no)*2);
+			disp(nd,h);
+			cout<<endl;
+			enqueue(nd->left);
+			enqueue(nd->right);
+		}
 	}
 
 }
@@ -89,10 +104,6 @@ int leaf(node* l){
 		return leaf(l->left)+leaf(l->right);
 	}
 }
-
-void enqueue(int a);
-int dequeue();
-bool isEmpty();
 
 int main(){
 	insert(9);
@@ -107,22 +118,10 @@ int main(){
 	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root);
 	cout<<endl<<"---------------------------------"<<endl;
 	printer(root);
-	
-	
-	//teting the queue
-	enqueue(2);enqueue(54);enqueue(6);
-	while(!isEmpty()){
-		cout<<dequeue()<<" ";
-	}
 }
 
 
 ///implementing queue
-struct point{
-	int val;
-	point* next;
-	point* prev;
-};
 
 point* parent=NULL;
 
@@ -131,9 +130,9 @@ bool isEmpty(){
 	return (parent==NULL);
 }
 
-void enqueue(int a){
+void enqueue(node* n){
 	point* p = new point;
-	p->val=a;
+	p->val=n;
 	p->next=p;
 	p->prev=p;
 	if(parent==NULL){
@@ -146,19 +145,19 @@ void enqueue(int a){
 	}
 }
 
-int dequeue(){
+node* dequeue(){
 	if(parent!=NULL){
 		if(parent->next==parent){
-			int temp = parent->val;
+			point* temp = parent;
 			parent=NULL;
-			return temp;
+			return temp->val;
 		}else{
-			int temp = (parent->prev)->val;
+			point* temp = (parent->prev);
 			parent->prev=parent->prev->prev;
 			parent->prev->next=parent;
-			return temp;
+			return temp->val;
 		}	 
 	}
-	return -1;
+	return NULL;
 }
 
