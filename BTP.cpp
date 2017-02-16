@@ -31,7 +31,7 @@ void insert(node* to,node* n){
 				insert(to->left,n);
 			else
 				to->left=n;
-		if(n->key>to->key) 
+		else if(n->key>to->key) 
 			if(to->right!=NULL)
 				insert(to->right,n);
 			else
@@ -78,12 +78,6 @@ int hight(node* tree){
 	}
 }
 
-void disp(node* p,int h){
-	for(int i=0;i<h/2;i++){
-		cout<<" ";
-	}	 
-	cout<<p->key;
-}
 
 int leaf(node* l);
 void printer(node* nd){
@@ -91,20 +85,48 @@ void printer(node* nd){
 		return;
 	else{
 		enqueue(nd);		
-		int lastLevel=0;
+		int lastLevel=-1;
 		int currentNodeLevel;
+		int middle=0;
+		node* temp;
 		while(!isEmpty()){
-			nd=dequeue();			
-			int h=max(leaf(nd),hight(nd)*2);
-			disp(nd,h);
-			currentNodeLevel=levelOf(nd,root);
+			temp=dequeue();			
+			int h=max(leaf(temp)*3/2,hight(temp));
+			currentNodeLevel=levelOf(temp,root);
 			if(currentNodeLevel!=lastLevel){
 				cout<<endl;
 				lastLevel=currentNodeLevel;
-			}
-			enqueue(nd->left);
-			enqueue(nd->right);
+				for(int i=0;i<h/2;i++){
+					cout<<" ";
+				}
+				middle=0;
+			}else{			
+				if(middle%2==0&&middle!=0){
+					for(int i=0;i<h;i++){
+						cout<<" ";
+					}
+				}else{
+					for(int i=0;i<h-1;i++){
+						cout<<" ";
+					}
+				}
+			middle++;
+				
+			}	 
+			cout<<temp->key;
+			/*debuging 
+			//	cout<<"is empty: "<<isEmpty()<<endl;
+			//	cout<<"temp: "<<temp;
+				cout<<"last level:"<<lastLevel<<" ";	
+				cout<<"current level:"<<currentNodeLevel<<" ";
+			/*end debuding*/
+			
+			if(temp->left!=NULL)
+				enqueue(temp->left);
+			if(temp->right!=NULL)
+				enqueue(temp->right);
 		}
+		cout<<endl;
 	}
 
 }
@@ -118,7 +140,7 @@ int leaf(node* l){
 }
 
 int levelOf(node* val,node* from){
-	if(val==from){
+	if(val->key==from->key){
 		return 0;
 	}else{
 		if(isInTree(val,from->left))
@@ -135,25 +157,30 @@ bool isInTree(node* val, node* in){
 		if(val->key==in->key)
 			return true;
 		else if(val->key>in->key)
-			return isInTree(val,in->left);
-		else 
 			return isInTree(val,in->right);
+		else 
+			return isInTree(val,in->left);
 	}
 	return false;
 }
 
 int main(){
-	insert(9);
-	insert(49);
-	insert(23);
-	insert(13);
-	insert(03);
-	insert(53);
-	insert(6);
+	insert(5);
+	insert(3);
+	insert(8);
+	insert(2);
+	insert(4);
 	insert(7);
+	insert(9);
+	insert(1);
+	insert(6);
+	insert(-1);
 	cout<<"preorder:";basicDisplay(root);
-	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root);
-	cout<<endl<<"---------------------------------"<<endl;
+	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root)<<endl;
+	node* temp = new node;
+	temp->key=49;
+	cout<<"level of "<<temp->key<<":"<<levelOf(temp,root)<<endl;
+	cout<<"---------------------------------"<<endl;
 	printer(root);
 }
 
