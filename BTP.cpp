@@ -1,4 +1,5 @@
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 struct node{
 	int key;
@@ -7,7 +8,9 @@ struct node{
 };
 
 node* root=NULL;
-
+void enqueue(int a);
+int dequeue();
+bool isEmpty();
 
 void insert(node* to,node* n){
 	if(n){
@@ -74,10 +77,15 @@ void printer(node* nd){
 	if(nd==NULL)
 		return;
 	else{
-		int h=max(leaf(nd),hight(nd)*2);
-		disp(nd,h);
-		cout<<endl;
-		printer(nd->left);
+		enqueue(nd);		
+		while(isEmpty()){
+			nd=dequeue();			
+			int h=max(leaf(nd),hight(nd)*2);
+			disp(nd,h);
+			cout<<endl;
+			enqueue(nd->left);
+			enqueue(nd->right);
+		}
 	}
 
 }
@@ -90,9 +98,7 @@ int leaf(node* l){
 	}
 }
 
-void enqueue(int a);
-int dequeue();
-bool isEmpty();
+
 
 int main(){
 	insert(9);
@@ -109,7 +115,7 @@ int main(){
 	printer(root);
 	
 	
-	//teting the queue
+	//testing the queue
 	enqueue(2);enqueue(54);enqueue(6);
 	while(!isEmpty()){
 		cout<<dequeue()<<" ";
