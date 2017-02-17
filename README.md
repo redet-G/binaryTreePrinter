@@ -4,19 +4,20 @@
 example of planned output of tree
 
 ```
-                5
-               / \
-              /   \
-             /     \
-            /       \
-           2         10
-          / \        / \
-         1   3      6   8
+       5
+      / \
+     /   \
+    /     \
+   3       8
+  / \
+ 2   4   7   9
+
 ```
+![screen shot of output](./binaryTreePrinter.png)
 
 # to do list
 - [x] code the tree it self
 - [x] make try basic printing
-- [ ] prepare standar tesing tree
+- [x] prepare standar tesing tree
 - [ ] try more advanced ones
 - [ ] refine the code
