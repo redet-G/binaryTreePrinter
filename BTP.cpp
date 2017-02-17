@@ -12,16 +12,16 @@ struct point{
 	point* next;
 	point* prev;
 };
-
+node* root=NULL;
+point* parent;
 void enqueue(node* a);
 node* dequeue();
 bool isEmpty();
 int levelOf(node*,node*);
 bool isInTree(node*,node*);
+node* find(node* val, node* in=root);
+int isleaf(node* ami);
 
-
-node* root=NULL;
-point* parent;
 
 
 void insert(node* to,node* n){
@@ -67,7 +67,7 @@ int count(node* p){
 		return 1+count(p->left)+count(p->right);
 	}
 }
-
+void space(int num){for(int i=0;i<num;i++)cout<<" ";}
 int max(int a, int b){return a>b?a:b;}
 
 int hight(node* tree){
@@ -86,39 +86,33 @@ void printer(node* nd){
 	else{
 		enqueue(nd);		
 		int lastLevel=-1;
+		int lastSpace=isleaf(root);
+		int currentSpace;
 		int currentNodeLevel;
-		int middle=0;
+		int tempSpace;
 		node* temp;
 		while(!isEmpty()){
 			temp=dequeue();			
-			int h=max(leaf(temp)*3/2,hight(temp));
 			currentNodeLevel=levelOf(temp,root);
+			currentSpace=isleaf(temp->left);
 			if(currentNodeLevel!=lastLevel){
+				tempSpace=lastSpace-currentSpace;
 				cout<<endl;
+				space(currentSpace);
+				cout<<temp->key;
+				space(tempSpace);
 				lastLevel=currentNodeLevel;
-				for(int i=0;i<h/2;i++){
-					cout<<" ";
-				}
-				middle=0;
-			}else{			
-				if(middle%2==0&&middle!=0){
-					for(int i=0;i<h;i++){
-						cout<<" ";
-					}
-				}else{
-					for(int i=0;i<h-1;i++){
-						cout<<" ";
-					}
-				}
-			middle++;
-				
-			}	 
-			cout<<temp->key;
+				lastSpace=currentSpace;
+			}else{
+				space(currentSpace);	
+				cout<<temp->key;
+				space(tempSpace);
+			}
 			/*debuging 
 			//	cout<<"is empty: "<<isEmpty()<<endl;
 			//	cout<<"temp: "<<temp;
-				cout<<"last level:"<<lastLevel<<" ";	
-				cout<<"current level:"<<currentNodeLevel<<" ";
+				cout<<" ll:"<<lastSpace<<" ";	
+				cout<<"cl:"<<currentSpace<<" ";
 			/*end debuding*/
 			
 			if(temp->left!=NULL)
@@ -133,12 +127,11 @@ void printer(node* nd){
 
 int leaf(node* l){
 	if(l==NULL)
-		return 1;
+		return 3;
 	else{
 		return leaf(l->left)+leaf(l->right);
 	}
 }
-
 int levelOf(node* val,node* from){
 	if(val->key==from->key){
 		return 0;
@@ -153,16 +146,42 @@ int levelOf(node* val,node* from){
 }
 
 bool isInTree(node* val, node* in){
+	return (find(val,in)==NULL)?false:true;
+}
+
+
+node* find(node* val, node* in){
 	if(in!=NULL){
 		if(val->key==in->key)
-			return true;
+			return in;
 		else if(val->key>in->key)
-			return isInTree(val,in->right);
-		else 
-			return isInTree(val,in->left);
+			return find(val,in->right);
+		else if(val->key<in->key)
+			return find(val,in->left);
+		else
+			return NULL;
 	}
-	return false;
+	return NULL;
 }
+
+int isleaf(node* ami){
+	if(ami!=NULL){
+		node* me = find(ami);
+		if(me!=NULL){
+			if(me->right==NULL&&me->left==NULL)
+				return 3;//it is a leaf
+			if(me->right!=NULL&&me->left==NULL)
+				return 2+isleaf(me->right);//not a leaf but is not a complete node
+			if(me->right==NULL&&me->left!=NULL)
+				return 2+isleaf(me->left);//not a leaf but is not a complete node
+			else 
+				return 1+isleaf(me->right)+isleaf(me->left);// not a leaf + is it complete node
+		}
+		
+	}
+	return 1;
+}
+
 
 int main(){
 	insert(5);
@@ -174,12 +193,12 @@ int main(){
 	insert(9);
 	insert(1);
 	insert(6);
-	insert(-1);
 	cout<<"preorder:";basicDisplay(root);
 	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root)<<endl;
 	node* temp = new node;
 	temp->key=49;
 	cout<<"level of "<<temp->key<<":"<<levelOf(temp,root)<<endl;
+	cout<<"spaceCout of root:"<<isleaf(root)<<endl;
 	cout<<"---------------------------------"<<endl;
 	printer(root);
 }
@@ -222,4 +241,5 @@ node* dequeue(){
 	}
 	return NULL;
 }
+
 
