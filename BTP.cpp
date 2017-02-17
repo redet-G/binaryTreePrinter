@@ -86,7 +86,7 @@ void printer(node* nd){
 	else{
 		enqueue(nd);		
 		int lastLevel=-1;
-		int lastSpace=isleaf(root);
+		int lastSpace=isleaf(root->left);
 		int currentSpace;
 		int currentNodeLevel;
 		int tempSpace;
@@ -98,12 +98,19 @@ void printer(node* nd){
 			if(currentNodeLevel!=lastLevel){
 				tempSpace=lastSpace-currentSpace;
 				cout<<endl;
+				
+				for(int i=lastSpace-1,j=1;i>currentSpace;i--,j+=2){
+					space(i);cout<<"/";
+					space(j);
+					cout<<"\\"<<endl;
+				}
 				space(currentSpace);
 				cout<<temp->key;
 				space(tempSpace);
 				lastLevel=currentNodeLevel;
 				lastSpace=currentSpace;
 			}else{
+				
 				space(currentSpace);	
 				cout<<temp->key;
 				space(tempSpace);
@@ -191,8 +198,8 @@ int main(){
 	insert(4);
 	insert(7);
 	insert(9);
-	insert(1);
-	insert(6);
+	//insert(1);
+	//insert(6);
 	cout<<"preorder:";basicDisplay(root);
 	cout<<endl<<"all:"<<count(root)<<endl<<"leaf:"<<leaf(root)<<endl<<"hight:"<<hight(root)<<endl;
 	node* temp = new node;
